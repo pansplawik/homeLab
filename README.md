@@ -1,64 +1,22 @@
-# 🖥️ Portfolio Homelaba – VirtualBox
+#  Portfolio/ HomeLab - symulacja architektury IT Szpitala
+## Analityczne podejście
 
-## 🎯 Cel projektu
-- Nauka i ćwiczenie administracji systemami Linux/Windows  
-- Testowanie środowisk sieciowych i usług serwerowych  
-- Automatyzacja i zarządzanie infrastrukturą wirtualną  
-- Symulacja realnego środowiska produkcyjnego  
+Informatyczny system szpitalny charakteryzuje się wysokim poziomem złożoności. Składa się on z wielu współpracujących ze sobą komponentów, takich jak wirtualizowane lub skonteneryzowane aplikacje medyczne i szpitalne, systemy monitorujące pracę całej infrastruktury oraz urządzenia i mechanizmy odpowiedzialne za bezpieczeństwo.
 
----
+Ze względu na krytyczny charakter przetwarzanych danych oraz konieczność zapewnienia wysokiej dostępności usług, projektowanie takiego systemu wymaga analitycznego podejścia. Każdy element infrastruktury musi być oceniany pod kątem wydajności, niezawodności, bezpieczeństwa oraz możliwości skalowania.
 
-## 💾 Sprzęt i baza
-- Laptop/PC: **[model, CPU, RAM, dysk]**  
-- System hosta: **Windows**  
-- Oprogramowanie: **Oracle VirtualBox + Extension Pack**  
+Szczególną uwagę zwrócono na logiczny podział systemu na warstwy funkcjonalne, co ułatwia zarządzanie, diagnostykę oraz dalszy rozwój infrastruktury. Zastosowanie wirtualizacji i konteneryzacji pozwala na izolację usług, ograniczenie wpływu awarii pojedynczego komponentu oraz efektywniejsze wykorzystanie zasobów sprzętowych.
 
----
+Dodatkowo uwzględniono mechanizmy monitoringu i logowania, które umożliwiają bieżącą analizę stanu systemu oraz szybką reakcję na potencjalne nieprawidłowości. Całość rozwiązania została zaprojektowana z myślą o spełnieniu wymagań systemów medycznych, takich jak ciągłość działania, integralność danych oraz zgodność z obowiązującymi standardami bezpieczeństwa.
+## Ogólna specyfikacja techniczna
 
-## 🗂️ Struktura homelaba
 
-### 🌐 Warstwa sieciowa
-- Router/Firewall: **Mikrotik hAP ac^2**  
-- Sieci: NAT / Host-only / Internal Network  
-- VLAN:
-    - 192.168.1.0/24 - skonfigurowana przez router ISP
-    - 192.168.80.0/24 - skonfigurowany przez mikrotika 
-    - 10.10.0.0/24 - VPN
+W celu stworzenia kompletnego i niskobudżetowego projektu wykorzystano sprawdzone, otwartoźródłowe rozwiązania dostępne na rynku. Kluczowym elementem infrastruktury jest hypervisor **KVM** w postaci platformy **Proxmox VE**. Jest to system do wirtualizacji, który umożliwia jednoczesne zarządzanie maszynami wirtualnymi (VM) oraz kontenerami aplikacyjnymi (LXC) z poziomu jednego środowiska.
 
-### 🖧 Serwery bazowe
-- **Linux Server (Ubuntu)**  
-  - Rola: serwer WWW (Nagios, Bandwidthd), SAMBA
-  - Cele:
-    - SSH monitoring (z wykorzystaniem konfiguracji wtyczek Nagios, oraz Bandwidthd)
+Jednym z głównych powodów wyboru Proxmox VE jest natywna obsługa **konteneryzacji LXC**. Rozwiązanie to sprawdza się idealnie w przypadku uruchamiania pojedynczych aplikacji lub lekkich usług, gdzie nie ma potrzeby tworzenia pełnych maszyn wirtualnych. Kontenery charakteryzują się mniejszym narzutem na zasoby oraz szybszym czasem uruchamiania. Takie podejście zostało zastosowane m.in. przy budowie systemu **PACS** oraz integracji pomiędzy innymi systemami. [Zostało to opisane tutaj.](/pacs)
 
-- **Linux Server (Red Hat)**  
-  - Rola: serwer WWW (Zabbix)  
-  - Cele:
-    - Nauka i przyswajanie wiedzy z konfiguracji aplikacji do zarządzania VM
-    - wysyłanie maili z raportami oraz błędami
-    - wykonywanie regularnego backup-u oraz wysyłanie go do MINIO (funkcjonalność utworzone z wykorzystanem CRON)  
+Proxmox VE został również wykorzystany do klasycznej wirtualizacji systemów Linux, takich jak **Ubuntu Server**. Jedną z kluczowych maszyn wirtualnych jest VM odpowiedzialna za uruchamianie skonteneryzowanych aplikacji służących do **monitorowania działania całej infrastruktury**. Szczegóły tego rozwiązania zostały opisane w dedykowanym rozdziale. [Opisane w tym rozdziale.](/monitoring)
 
-- **Linux Serwer (Ubuntu)**  
-  - Rola: Serwer OpenVPN  
-  - Cele:
-    - nauka tworzenia serwera VPN
-    - nauka tworzenia osobnego VLAN-u
-    - nauka IPTABLES, ufw oraz ip 
-    - nauka tworzenia połączenia dwuskładniowego
+Współczesne systemy IT coraz częściej opierają się na rozwiązaniach chmurowych, odchodząc od utrzymywania całej infrastruktury w lokalnych centrach danych. W prezentowanym projekcie zastosowano **model hybrydowy**, łączący infrastrukturę lokalną z zasobami zewnętrznymi. W tym celu wykorzystano serwer **VPS**, który pełni kilka istotnych funkcji.
 
-- **Windows 11**  
-  - Rola: serwer PACS połączony z nanoRIS
-  - Cele:
-    - stworzenie PACS z wykorzystaniem DICOM Conquest
-    - integracja z Mirth Connect 4.5.2 (Pełni funkcję nanoRIS)
-
-- **Linux Serwer (MINIO)**  
-  - Rola: twierdza danych  
-  - Cele:
-    - nauka tworzenia twierdzy danych MINIO
-    - konfiguracja bucketu
-    - konfiguracja nowych kkluczy oraz dostęp do bucketów
-
-### 💻 Stacje robocze (klienci)
-- **Windows 11** – test logowania się do aplikacji, udział w SAMBIE oraz łączenie z VPN
----
+Jedną z nich jest rola **repozytorium kopii zapasowych**, zgodnie z zasadą **3-2-1 backup**. Dodatkowo VPS został wykorzystany do zbierania i przetwarzania danych pochodzących z systemu monitorowania temperatury i wilgotności w mieszkaniu. Dane te są przesyłane z mikrokontrolerów (co stanowi jedno z moich hobby) z wykorzystaniem protokołu **MQTT**. [Więcej szczegółów znajduje się tutaj.](/vps)
