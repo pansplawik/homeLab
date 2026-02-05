@@ -50,7 +50,7 @@ Każda strona:
 - wykorzystuje mechanizm `location` oraz `alias`,
 - dostępna jest poprzez HTTPS.
 
-## Aplikacje backendowe (Python + Flask)
+## Aplikacje skonteneryzowane (Python + Flask)
 
 Zostały stworzone aplikacje wykorzystujące framework pythonow Flask:
 
@@ -66,18 +66,16 @@ Cechy:
 - dostęp z zewnątrz realizowany jest wyłącznie przez Nginx (reverse proxy),
 - routing odbywa się na podstawie ścieżki URL (path-based routing).
 
+## Nginx jako centralny serwer proxy
+W celu scentralizowania systemu orz wykorzystania terminacji TLS aplikacje hostowane w tym homelabie również są puszczone z wykorzystaniem serwera centralnego:
 
-## Aplikacja frontendowa (React)
-
-Stworzono aplikację webową typu SPA (**Single Page Application**) w technologii **React**:
-- aplikacja budowana jest w trybie produkcyjnym (`npm run build`),
-- pliki statyczne serwowane są przez Nginx,
-- aplikacja dostępna jest pod ścieżką `/cv`,
-- poprawnie obsługuje routing frontendowy (React Router),
-- poprawnie ładowane są zasoby statyczne (`/static/js`, `/static/css`).
-
-
-
+| Aplikacja | ścieżka oryginalna       | ścieżka w nginx|
+|-----------|--------------------------|----------------|
+|Orthanc    |http://192.168.1.38:8042/ |/orthanc        |
+|Zabbix     |http://192.168.1.35:80/   |/zabbix         |
+|Portainer  |http://192.168.1.35:9990/ |/portainer      |
+|FHIR Server|http://192.168.1.39:8080/ |/fhir           |
+|Pseudoris  |http://192.168.1.38:5000/ |/pseudoris
 ## Reverse Proxy (Nginx)
 
 Nginx pełni rolę **centralnego reverse proxy**, odpowiadając za:
