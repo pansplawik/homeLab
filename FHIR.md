@@ -47,3 +47,27 @@ Wszystkie dane o pacjencie oraz zleceniu dostępne są w module opisowym.
 Po Wykonaniu opisu generowana jest ramka HL7ORU i wysyłana do Mirth, a sam opis zapisany jest w osobnej bazie i podpięty do zlecenia RIS. Na ten moment nieprzewidywana jest możliwość poprawki opisu.
 W przyszłości planowana jest priorytetyzowanie zleceń na podstawie tagi priority z zlecenia FHIR.
 W momencie pisania tej dokumentacji aplikacja jest prototypem wersji RIS-owej i służy tlyko do podglądu mechanizmów działania systemu radiologicznego oraz pracy w nim.
+
+## Orthanc PACS
+Orthanc to lekki, open-source serwer DICOM/PACS, służący do przechowywania, zarządzania i udostępniania badań obrazowych.
+Udostępnia REST API, wtyczki i integracje, dzięki czemu łatwo łączy się z innymi systemami.
+Ze względu na brak modułu zleceniowego oraz opisowego mocno synchronizuje się z systemem PseudoRIS.
+Służy do przeglądania oraz gromadzenia badań.
+
+# Typy komunikatów wykorzystywanych w laboratorium
+## HL7 ORU
+HL7 ORU message result posiada kompletne dane na temat wyniku oraz opisu badania diagnostycznego. Generowany jest w momnecie zakonczenia opisu w PseudoRIS i wysyłany jest do Mirth w celu dalszego mapowania. 
+Przykładowa ramka:
+```
+MSH|^~\&|RIS|RIS_HOSPITAL|PACS|PACS_HOSPITAL|20260128211957||ORU^R01|219153|P|2.5.1
+PID|1||219177^^^HOSPITAL^MR||Nowak^Jan||19850412|M|||ul. Zdrowa 10^^Warszawa^^00-001^PL||600700800
+ORC|RE|219196|||||20260129
+OBR|1|219196||77477000^CT głowy^SNOMED|||20260129|||||||||||||||||||||||||
+OBX|1|TX|RESULT^Opis badania^L||TK głowy bez kontrastu\.br\Brak cech krwawienia\.br\Układ komorowy symetryczny||||||F
+```
+Jak widać komunikat podzielony jest na następujące segmenty:
+- `MSH` - Nagłówek wiadomości określający typ komunikatu (ORU^R01), system nadawcy i odbiorcy, datę wysłania oraz identyfikator komunikatu.
+- `PID` – Segment pacjenta zawierający identyfikator, imię i nazwisko, datę urodzenia, płeć oraz dane adresowe i kontaktowe.
+- `ORC` – Segment zlecenia, który identyfikuje konkretne skierowanie/badanie i w Twoim projekcie mapuje się bezpośrednio na ServiceRequest w FHIR.
+- `OBR` – Segment szczegółów badania opisujący wykonane badanie obrazowe (np. CT głowy) wraz z kodem medycznym i datą realizacji.
+- `OBX` – Segment wyniku zawierający opis badania, czyli właściwy raport lekarza, który trafia do Observation w FHIR.
