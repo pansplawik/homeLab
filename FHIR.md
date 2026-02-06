@@ -25,3 +25,11 @@ Framework wspiera REST API, walidację zasobów, wyszukiwanie oraz wersjonowanie
 ## Mirth Connect
 To silnik integracyjny (integration engine) wykorzystywany głównie w ochronie zdrowia do wymiany danych między systemami medycznymi. Najczęściej obsługuje standard HL7 v2, ale potrafi też pracować z FHIR, XML, JSON, CSV czy komunikacją REST/HTTP. 
 Umożliwia budowanie kanałów integracyjnych z filtrami, transformerami i connectorami, w których można mapować, walidować i modyfikować dane.
+W laboratorium Mirth został użyty do integracji między serwerem FHIR, serwerem PsuedoRIS.
+### Generowanie zleceń 
+Mirth odpytuje FHR czy posiada aktywne zlecenia radiologiczne. Na ich podstawie tworzy nowy wiersz w bazie danych dla zlecenia oraz jeśli pacjent nie istnieje w bazie tworzy nowego pacjenta o podanym id. Następnie tworzony jest plik .wml do worklisty PACS-a.
+Po wynkonaniu wszystkich powyższych kroków zmieniany jest status w FHIS na `draft`.
+### Generowanie opisów
+Po wykonaiu opisu pseudoris wysyła do mirth ramkę HL7 ORU. Po otrzymaniu jej mirth konwertuje ją na odpowiedni endpoint do FHIR. 
+W celu trzymania opisu w kilku miejscach, mirth genenruje plik `.pdf` opisowy, który po konwersji na base64 wgrywany jest do badania radiologicznego na PACS-ie.
+Na koniec zmieniany jest status zlecenia w FHIR na `complete`.
