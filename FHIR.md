@@ -26,6 +26,7 @@ Framework wspiera REST API, walidację zasobów, wyszukiwanie oraz wersjonowanie
 To silnik integracyjny (integration engine) wykorzystywany głównie w ochronie zdrowia do wymiany danych między systemami medycznymi. Najczęściej obsługuje standard HL7 v2, ale potrafi też pracować z FHIR, XML, JSON, CSV czy komunikacją REST/HTTP. 
 Umożliwia budowanie kanałów integracyjnych z filtrami, transformerami i connectorami, w których można mapować, walidować i modyfikować dane.
 W laboratorium Mirth został użyty do integracji między serwerem FHIR, serwerem PsuedoRIS.
+Aktualnie posiada dwa główne kanały.
 ### Generowanie zleceń 
 Mirth odpytuje FHR czy posiada aktywne zlecenia radiologiczne. Na ich podstawie tworzy nowy wiersz w bazie danych dla zlecenia oraz jeśli pacjent nie istnieje w bazie tworzy nowego pacjenta o podanym id. Następnie tworzony jest plik .wml do worklisty PACS-a.
 Po wynkonaniu wszystkich powyższych kroków zmieniany jest status w FHIS na `draft`.
@@ -33,3 +34,16 @@ Po wynkonaniu wszystkich powyższych kroków zmieniany jest status w FHIS na `dr
 Po wykonaiu opisu pseudoris wysyła do mirth ramkę HL7 ORU. Po otrzymaniu jej mirth konwertuje ją na odpowiedni endpoint do FHIR. 
 W celu trzymania opisu w kilku miejscach, mirth genenruje plik `.pdf` opisowy, który po konwersji na base64 wgrywany jest do badania radiologicznego na PACS-ie.
 Na koniec zmieniany jest status zlecenia w FHIR na `complete`.
+
+## PseudoRIS
+RIS, czyli `Radiology Information System` to kluczowe miejsce do gromadzenia danych o zleceniach badań radiologicznych. 
+Na podstawie danych znajdujących się w tym systemie gnenerowane są badania, gromadzone opisy oraz generowane raporty pacjentów. 
+W celach laboratoryjnych został stworzony prototyp systemu RIS. 
+Posiada prostą bazę danych zawierająca trzy tabele: `zlecenia`,`pacjenci`,`opisy`.
+Zapisuje najważniejsze dane nt. zlecenia takie jak: idzlecenia, kod procedury, nazwa badania, notatka kliniczna, data zlecenia.
+Synchronizacja RIS-PACS odbywa sie za pomocą id zlecenia pochodząca z FHIR: `ID zlecenia FHIR = ID zlecenia PseudoRIS = Numer dostepu PACS`
+OPis jest możliwy tylko w przypadku synchronizacji RIS-PACS. 
+Wszystkie dane o pacjencie oraz zleceniu dostępne są w module opisowym. 
+Po Wykonaniu opisu generowana jest ramka HL7ORU i wysyłana do Mirth, a sam opis zapisany jest w osobnej bazie i podpięty do zlecenia RIS. Na ten moment nieprzewidywana jest możliwość poprawki opisu.
+W przyszłości planowana jest priorytetyzowanie zleceń na podstawie tagi priority z zlecenia FHIR.
+W momencie pisania tej dokumentacji aplikacja jest prototypem wersji RIS-owej i służy tlyko do podglądu mechanizmów działania systemu radiologicznego oraz pracy w nim.
