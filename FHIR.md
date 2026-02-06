@@ -71,3 +71,142 @@ Jak widać komunikat podzielony jest na następujące segmenty:
 - `ORC` – Segment zlecenia, który identyfikuje konkretne skierowanie/badanie i w Twoim projekcie mapuje się bezpośrednio na ServiceRequest w FHIR.
 - `OBR` – Segment szczegółów badania opisujący wykonane badanie obrazowe (np. CT głowy) wraz z kodem medycznym i datą realizacji.
 - `OBX` – Segment wyniku zawierający opis badania, czyli właściwy raport lekarza, który trafia do Observation w FHIR.
+## FHIR - Utworzenie pacjenta
+- `POST /Patient`
+- Przykład:
+```
+curl -X POST \
+  http://localhost:8080/hapi-fhir-jpaserver/fhir/Patient \
+  -H "Content-Type: application/fhir+json" \
+  -H "Accept: application/fhir+json" \
+  -d '{
+    "resourceType": "Patient",
+    "identifier": [{
+      "system": "http://hospital.example.org/mrn",
+      "value": "MRN-0002"
+    }],
+    "name": [{
+      "use": "official",
+      "family": "Nowak",
+      "given": ["Jan"],
+      "prefix": ["Pan"]
+    }],
+    "gender": "male",
+    "birthDate": "1985-04-12",
+    "telecom": [{
+      "system": "phone",
+      "value": "600700800"
+    }],
+    "address": [{
+      "line": ["ul. Zdrowa 10"],
+      "city": "Warszawa",
+      "postalCode": "00-001",
+      "country": "PL"
+    }]
+  }'
+```
+- Cel: stworzenie pacjenta, do którego później przypinane są zlecenia i wyniki.
+
+## FHIR Utworzenie skierowania (ServiceRequest – badanie obrazowe)
+- `POST /ServiceRequest`
+- Przykład:
+```
+curl -X POST \
+  http://localhost:8080/hapi-fhir-jpaserver/fhir/ServiceRequest \
+  -H "Content-Type: application/fhir+json" \
+  -H "Accept: application/fhir+json" \
+  -d '{
+    "resourceType": "ServiceRequest",
+    "status": "active",
+    "intent": "order",
+    "priority": "routine",
+    "category": [{
+      "coding": [{
+        "system": "http://terminology.hl7.org/CodeSystem/service-request-category",
+        "code": "imaging",
+        "display": "Imaging"
+      }]
+    }],
+    "code": {
+      "coding": [{
+        "system": "http://snomed.info/sct",
+        "code": "77477000",
+        "display": "CT of head"
+      }],
+      "text": "CT głowy"
+    },
+    "subject": {
+      "reference": "Patient/219177"
+    },
+    "authoredOn": "2026-01-29",
+    "reasonCode": [{
+      "text": "Bóle głowy, podejrzenie zmian śródczaszkowych"
+    }],
+    "note": [{
+      "text": "Badanie TK głowy bez kontrastu"
+    }]
+  }'
+```
+- Cel: tworzenie nowwego zlecenia
+  
+## FHIR Pobranie aktywnych skierowań obrazowych
+- `GET /ServiceRequest?category=imaging&status=active`
+- Przykład:
+```
+curl -X GET \
+  "http://localhost:8080/hapi-fhir-jpaserver/fhir/ServiceRequest?category=imaging&status=active&_count=1" \
+  -H "Accept: application/fhir+json"
+```
+- Cel: uzyskanie aktywnych zleceń w celu utworzenia zleceń w systemie RIS
+
+## FHIR Dodanie opisu
+- `POST /Observation`
+- Przykład:
+```
+curl -X POST \
+  http://localhost:8080/hapi-fhir-jpaserver/fhir/Observation \
+  -H "Content-Type: application/fhir+json" \
+  -H "Accept: application/fhir+json" \
+  -d '{
+    "resourceType": "Observation",
+    "status": "final",
+    "category": [{
+      "coding": [{
+        "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+        "code": "imaging",
+        "display": "Imaging"
+      }]
+    }],
+    "code": {
+      "coding": [{
+        "system": "http://snomed.info/sct",
+        "code": "363680008",
+        "display": "Chest X-ray"
+      }],
+      "text": "RTG klatki piersiowej"
+    },
+    "subject": {
+      "reference": "Patient/219177"
+    },
+    "basedOn": [{
+      "reference": "ServiceRequest/219153"
+    }],
+    "effectiveDateTime": "2026-01-29T21:30:00Z",
+    "valueString": "Brak zmian ogniskowych, sylwetka serca prawidłowa."
+  }'
+```
+
+## FHIR Zmiana statusu ServiceRequest na completed
+- `PUT /ServiceRequest/{id}`
+- Przykład:
+```
+curl -X PUT \
+  http://localhost:8080/hapi-fhir-jpaserver/fhir/ServiceRequest/219153 \
+  -H "Content-Type: application/fhir+json" \
+  -H "Accept: application/fhir+json" \
+  -d '{
+    "resourceType": "ServiceRequest",
+    "id": "219153",
+    "status": "completed"
+  }'
+```
