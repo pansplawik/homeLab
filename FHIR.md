@@ -45,9 +45,9 @@ Synchronizacja RIS-PACS odbywa sie za pomocą id zlecenia pochodząca z FHIR: `I
 OPis jest możliwy tylko w przypadku synchronizacji RIS-PACS. 
 Wszystkie dane o pacjencie oraz zleceniu dostępne są w module opisowym. 
 Po Wykonaniu opisu generowana jest ramka HL7ORU i wysyłana do Mirth, a sam opis zapisany jest w osobnej bazie i podpięty do zlecenia RIS. Na ten moment nieprzewidywana jest możliwość poprawki opisu.
-W przyszłości planowana jest priorytetyzowanie zleceń na podstawie tagi priority z zlecenia FHIR.
 W momencie pisania tej dokumentacji aplikacja jest prototypem wersji RIS-owej i służy tlyko do podglądu mechanizmów działania systemu radiologicznego oraz pracy w nim.
-
+![alt text](zdj\pseudorisServiceMain.png)
+![alt text](zdj/modulopisowy.png)
 ## Orthanc PACS
 Orthanc to lekki, open-source serwer DICOM/PACS, służący do przechowywania, zarządzania i udostępniania badań obrazowych.
 Udostępnia REST API, wtyczki i integracje, dzięki czemu łatwo łączy się z innymi systemami.
@@ -195,6 +195,7 @@ curl -X POST \
     "valueString": "Brak zmian ogniskowych, sylwetka serca prawidłowa."
   }'
 ```
+- Cel: w mirth generowanie json z opisem do fhir
 
 ## FHIR Zmiana statusu ServiceRequest na completed
 - `PUT /ServiceRequest/{id}`
@@ -210,3 +211,4 @@ curl -X PUT \
     "status": "completed"
   }'
 ```
+- Cel: zmiana statusu w fhir
