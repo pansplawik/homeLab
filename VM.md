@@ -11,6 +11,7 @@ Dzięki tej aplikacji mogłem przyswoić wiedzę z zakresu działania Dockera, a
 - sieć
 - volumeny
 - kontenery
+
 Podsumowując aplikacja ta pozwoliła zwiększyć produktywność oraz wiedzę w zakresie działania Dockera i konteneryzacji.
 
 ## Zabbix - kontrolowanie wybranych sytuacji 
@@ -21,6 +22,7 @@ Zabbix za pomocą odpowiednich `externalscriptow` wywoluje monitorowanie dla pew
 - działanie mirth
 - działanie PACS-a
 - działania wykonywanie Backup-u do MinioS3
+  
 Każde nieprawidłowe działanie włącza odpowiedni Trigger, który powoduje wysłanie na mail administartorski. 
 
 ## Prometheus - kolekcjonowanie metryk funkcjonowania oraz wydajności
@@ -31,11 +33,24 @@ Dane te są zbierane w czasie rzeczywistym. Wykorzystywani są agenci, którzy m
 - docker
 - serwer orthanc
 - minioS3
+  
 Wszyscy monitorowani agenci są wypisani w pliku `.yml`
 ```
 TODO:
 ```
 
 ## Grafana - profesjonalna wizualizacja danych w czasie rzeczywistym
+Dane zebrane z metryk potrzeba prawidłowo zaprezentować w czasie rzeczywistym.
+`Grafana` pozwala na tworzenie profesjonalnych wizualizacji w rózńym stylu. 
 
+W projekcie zostały stworzone wykresy dla większości podanych powyżej danych i zostały zaprezentowane poniżej:
+```
+TODO
+```
 ## Grafana Loki - analiza logów
+Ważnym elementem analizy błedów jest czytanie logów. Loki to aplikacja do profesjonalnej analizy logów z podziałem na aplikację pochodzącą w czasie rzeczywistym. 
+Host Loki można w bardzo prosty sposób podpiąc do Grafany, gdzie można stworzyć odpowiedni Dashboard.
+W przypadku tego projektu stworzono dwa proste dashboardy dla dockera oraz nginx. 
+```
+TODO:
+```
