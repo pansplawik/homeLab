@@ -24,6 +24,7 @@ Zabbix za pomocą odpowiednich `externalscriptow` wywoluje monitorowanie dla pew
 - działania wykonywanie Backup-u do MinioS3
   
 Każde nieprawidłowe działanie włącza odpowiedni Trigger, który powoduje wysłanie na mail administartorski. 
+![alt text](zdj/triggeryZabbix.png)
 
 ## Prometheus - kolekcjonowanie metryk funkcjonowania oraz wydajności
 Ważną umiejętnością sysadmina jest analiza funkcjonowania orz wydajności systemów i aplikacji. Monitorowanie w każdym z osobna jest małoefektywne, dlatego ważne jest wykorzystywanie centralizacji. 
@@ -33,11 +34,8 @@ Dane te są zbierane w czasie rzeczywistym. Wykorzystywani są agenci, którzy m
 - docker
 - serwer orthanc
 - minioS3
-  
-Wszyscy monitorowani agenci są wypisani w pliku `.yml`
-```
-TODO:
-```
+
+![alt text](zdj/prometheus.png)
 
 ## Grafana - profesjonalna wizualizacja danych w czasie rzeczywistym
 Dane zebrane z metryk potrzeba prawidłowo zaprezentować w czasie rzeczywistym.
