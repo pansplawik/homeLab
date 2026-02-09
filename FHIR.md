@@ -46,7 +46,7 @@ OPis jest możliwy tylko w przypadku synchronizacji RIS-PACS.
 Wszystkie dane o pacjencie oraz zleceniu dostępne są w module opisowym. 
 Po Wykonaniu opisu generowana jest ramka HL7ORU i wysyłana do Mirth, a sam opis zapisany jest w osobnej bazie i podpięty do zlecenia RIS. Na ten moment nieprzewidywana jest możliwość poprawki opisu.
 W momencie pisania tej dokumentacji aplikacja jest prototypem wersji RIS-owej i służy tlyko do podglądu mechanizmów działania systemu radiologicznego oraz pracy w nim.
-![alt text](zdj\pseudorisServiceMain.png)
+![alt text](zdj/pseudorisServiceMain.png)
 ![alt text](zdj/modulopisowy.png)
 ## Orthanc PACS
 Orthanc to lekki, open-source serwer DICOM/PACS, służący do przechowywania, zarządzania i udostępniania badań obrazowych.
