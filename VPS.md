@@ -22,3 +22,9 @@ MinioS3 jest lokalnym serwerem kompatybilnym z API S3, który służy do przecho
 
 ### WikiJS – portfolio
 WikiJS został wykorzystany jako centralne narzędzie do dokumentowania całego projektu. Pozwala tworzyć strukturalną, wersjonowaną dokumentację w formacie Markdown, obejmującą opis infrastruktury, konfiguracje usług, procedury backupu i bezpieczeństwa. Dzięki WikiJS możliwe jest łatwe udostępnianie i aktualizowanie wiedzy o systemie, a także przygotowanie przejrzystego i profesjonalnego portfolio prezentującego kompetencje w zakresie DevOps i administracji systemami.
+
+# Wirtualny zewnętrzny storage - NextCLoud
+Zgodnie z zasadą 3-2-1 jedna z kopii backupu powinna znajdować się w dwóch fizycznych lokalizacjach. 
+Wykorzystano rozwiązanie chmurowe `NextCloud`, do gromadzenia backupu wszszytkich plików znajdujących się na VM oraz LXC.
+Aby zintegrować udostępnianie folder z backupem wykorzystano `davfs2` do montowania WebDAV jako osobny dysk. 
+W celu skompletowania rozwiązania dodano odpowiedni skrypt w `crontab`, aby regularnie wykonywać backup raz w dziennie.
