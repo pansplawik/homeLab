@@ -14,7 +14,6 @@
                   │  - Monitoring (Prometheus│
                   │    + Grafana + Loki)     │
                   └──────────────────────────┘
-
 ```
 
 ## Podział na użyte kontenery
@@ -27,7 +26,6 @@
                   │  - Mirth Connect         │
                   │  - Orthanc (PACS)        │
                   └──────────────────────────┘
-
 ```
 
 ## Schemat przepływu danych radiologicznych
@@ -56,4 +54,28 @@ FHIR Observation / DiagnosticReport                           Orthanc PACS
                               │
                               ▼      
                   Nextcloud (Off-site storage)
+```
+
+## Wykresy robione w Grafanie
+```
+                  ┌──────────────────────────┐
+                  │      Wykresy (LXC)       │
+                  │  - OpenVPN               │
+                  │  - Docker                │
+                  │  - Orthanc               │
+                  │  - NGINX (logs)          │
+                  │  - Docker (logs)         │
+                  │  - MQTT                  │
+                  └──────────────────────────┘
+```
+
+### Schemat przeływu logów i metryk
+```
+                        Agenci exporterzy 
+                              │
+                              ▼
+                        Prometheus + Loki 
+                              │
+                              ▼      
+                       Grafana Dashboard
 ```
