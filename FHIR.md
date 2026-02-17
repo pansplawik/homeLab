@@ -76,7 +76,7 @@ Jak widać komunikat podzielony jest na następujące segmenty:
 - Przykład:
 ```
 curl -X POST \
-  http://localhost:8080/hapi-fhir-jpaserver/fhir/Patient \
+  http://localhost:8881/fhir/Patient \
   -H "Content-Type: application/fhir+json" \
   -H "Accept: application/fhir+json" \
   -d '{
@@ -112,7 +112,7 @@ curl -X POST \
 - Przykład:
 ```
 curl -X POST \
-  http://localhost:8080/hapi-fhir-jpaserver/fhir/ServiceRequest \
+  http://localhost:8881/fhir/ServiceRequest \
   -H "Content-Type: application/fhir+json" \
   -H "Accept: application/fhir+json" \
   -d '{
@@ -154,7 +154,7 @@ curl -X POST \
 - Przykład:
 ```
 curl -X GET \
-  "http://localhost:8080/hapi-fhir-jpaserver/fhir/ServiceRequest?category=imaging&status=active&_count=1" \
+  "http://localhost:8881/fhir/ServiceRequest?category=imaging&status=active&_count=1" \
   -H "Accept: application/fhir+json"
 ```
 - Cel: uzyskanie aktywnych zleceń w celu utworzenia zleceń w systemie RIS
@@ -164,7 +164,7 @@ curl -X GET \
 - Przykład:
 ```
 curl -X POST \
-  http://localhost:8080/hapi-fhir-jpaserver/fhir/Observation \
+  http://localhost:8881/fhir/Observation \
   -H "Content-Type: application/fhir+json" \
   -H "Accept: application/fhir+json" \
   -d '{
@@ -202,7 +202,7 @@ curl -X POST \
 - Przykład:
 ```
 curl -X PUT \
-  http://localhost:8080/hapi-fhir-jpaserver/fhir/ServiceRequest/219153 \
+  http://localhost:8881/fhir/ServiceRequest/219153 \
   -H "Content-Type: application/fhir+json" \
   -H "Accept: application/fhir+json" \
   -d '{
