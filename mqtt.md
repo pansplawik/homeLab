@@ -23,4 +23,4 @@ W tej częsci projektu wykorzystano serwer Mosquito jako broker. Następnie tele
 Jednym z dużych ułatwień influxdb jest użycie bezpośredniego połączenia między ESP32, a Influxdb. Influxdb udostępnia bibliotekę w arduino ide do wysyłania danych za pomocą HTTP. Influxdb posiada rozbudowane GUI z możliwością generowania kodu dla esp32 do łączenia się z wybranym bucketem oraz wysyłaniem danych. Rozwiązanie to pozwala omijać tworzenie kontenerów z dodatkowymi aplikacjami do przekierowywania kolejki z danymi. 
 ### Grafana
 Wszsytkie dane przesyłane do `Influxdb` są prezentowane w czasie rzeczywistym w specjalnie przygotowanym dashboardzie, widocznym poniżej.
-![alt text](image.png)
+![alt text](zdj/influxdb.png)

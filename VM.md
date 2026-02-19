@@ -49,6 +49,4 @@ TODO
 Ważnym elementem analizy błedów jest czytanie logów. Loki to aplikacja do profesjonalnej analizy logów z podziałem na aplikację pochodzącą w czasie rzeczywistym. 
 Host Loki można w bardzo prosty sposób podpiąc do Grafany, gdzie można stworzyć odpowiedni Dashboard.
 W przypadku tego projektu stworzono dwa proste dashboardy dla dockera oraz nginx. 
-```
-TODO:
-```
+![alt text](zdj/grafanaloki.png)
