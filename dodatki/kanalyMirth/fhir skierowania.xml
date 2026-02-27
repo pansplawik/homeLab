@@ -379,8 +379,8 @@ try {
     dbConn = DatabaseConnectionFactory.createDatabaseConnection(
         &apos;com.mysql.cj.jdbc.Driver&apos;,
         &apos;jdbc:mysql://192.168.1.38:3306/risdb&apos;,
-        &apos;root&apos;,
-        &apos;rootpassword123&apos;
+        &apos;***&apos;,
+        &apos;***password123&apos;
     );
 
     // =========================
