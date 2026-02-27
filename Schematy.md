@@ -79,3 +79,29 @@ FHIR Observation / DiagnosticReport                           Orthanc PACS
                               ▼      
                        Grafana Dashboard
 ```
+
+
+### Schemat przepływu danych z czujnika protokołem MQTT
+```
+                      ESP32 + DHT22 + Moduł WiFI 
+                              │
+                              ▼
+                        Mosquitos (Broker MQTT) 
+                              │
+                              ▼      
+    Telegraf + InfluxDB (Skrapping komunikatów + storage do bazy)
+                              │
+                              ▼
+                 Grafana (wykresy i statystyka)
+```
+
+### Schemat przepływu danych z czujnika krótsza droga
+```
+                      ESP32 + DHT22 + Moduł WiFI 
+                              │
+                              ▼
+          InfluxDB (wgrania danych bezpośrednio do wybrane bucketu)
+                              │
+                              ▼
+                 Grafana (wykresy i statystyka)
+```
