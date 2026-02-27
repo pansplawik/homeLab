@@ -1,0 +1,703 @@
+<channel version="4.5.2">
+  <id>4418fd37-8834-4afc-af26-d6471e86a830</id>
+  <nextMetaDataId>6</nextMetaDataId>
+  <name>fhir skierowania</name>
+  <description></description>
+  <revision>24</revision>
+  <sourceConnector version="4.5.2">
+    <metaDataId>0</metaDataId>
+    <name>sourceConnector</name>
+    <properties class="com.mirth.connect.connectors.vm.VmReceiverProperties" version="4.5.2">
+      <pluginProperties/>
+      <sourceConnectorProperties version="4.5.2">
+        <responseVariable>None</responseVariable>
+        <respondAfterProcessing>true</respondAfterProcessing>
+        <processBatch>false</processBatch>
+        <firstResponse>false</firstResponse>
+        <processingThreads>1</processingThreads>
+        <resourceIds class="linked-hash-map">
+          <entry>
+            <string>Default Resource</string>
+            <string>[Default Resource]</string>
+          </entry>
+        </resourceIds>
+        <queueBufferSize>1000</queueBufferSize>
+      </sourceConnectorProperties>
+    </properties>
+    <transformer version="4.5.2">
+      <elements/>
+      <inboundDataType>JSON</inboundDataType>
+      <outboundDataType>JSON</outboundDataType>
+      <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+        <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+          <splitType>JavaScript</splitType>
+          <batchScript></batchScript>
+        </batchProperties>
+      </inboundProperties>
+      <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+        <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+          <splitType>JavaScript</splitType>
+          <batchScript></batchScript>
+        </batchProperties>
+      </outboundProperties>
+    </transformer>
+    <filter version="4.5.2">
+      <elements/>
+    </filter>
+    <transportName>Channel Reader</transportName>
+    <mode>SOURCE</mode>
+    <enabled>true</enabled>
+    <waitForPrevious>true</waitForPrevious>
+  </sourceConnector>
+  <destinationConnectors>
+    <connector version="4.5.2">
+      <metaDataId>1</metaDataId>
+      <name>Destination 1</name>
+      <properties class="com.mirth.connect.connectors.http.HttpDispatcherProperties" version="4.5.2">
+        <pluginProperties/>
+        <destinationConnectorProperties version="4.5.2">
+          <queueEnabled>false</queueEnabled>
+          <sendFirst>false</sendFirst>
+          <retryIntervalMillis>10000</retryIntervalMillis>
+          <regenerateTemplate>false</regenerateTemplate>
+          <retryCount>0</retryCount>
+          <rotate>false</rotate>
+          <includeFilterTransformer>false</includeFilterTransformer>
+          <threadCount>1</threadCount>
+          <threadAssignmentVariable></threadAssignmentVariable>
+          <validateResponse>false</validateResponse>
+          <resourceIds class="linked-hash-map">
+            <entry>
+              <string>Default Resource</string>
+              <string>[Default Resource]</string>
+            </entry>
+          </resourceIds>
+          <queueBufferSize>1000</queueBufferSize>
+          <reattachAttachments>true</reattachAttachments>
+        </destinationConnectorProperties>
+        <host>http://192.168.1.39:8881/fhir/ServiceRequest?category=imaging&amp;status=active&amp;_count=1</host>
+        <useProxyServer>false</useProxyServer>
+        <proxyAddress></proxyAddress>
+        <proxyPort></proxyPort>
+        <method>get</method>
+        <headers class="linked-hash-map"/>
+        <parameters class="linked-hash-map"/>
+        <useHeadersVariable>false</useHeadersVariable>
+        <headersVariable></headersVariable>
+        <useParametersVariable>false</useParametersVariable>
+        <parametersVariable></parametersVariable>
+        <responseXmlBody>false</responseXmlBody>
+        <responseParseMultipart>true</responseParseMultipart>
+        <responseIncludeMetadata>false</responseIncludeMetadata>
+        <responseBinaryMimeTypes>application/.*(?&lt;!json|xml)$|image/.*|video/.*|audio/.*</responseBinaryMimeTypes>
+        <responseBinaryMimeTypesRegex>true</responseBinaryMimeTypesRegex>
+        <multipart>false</multipart>
+        <useAuthentication>false</useAuthentication>
+        <authenticationType>Basic</authenticationType>
+        <usePreemptiveAuthentication>false</usePreemptiveAuthentication>
+        <username></username>
+        <password></password>
+        <content></content>
+        <contentType>text/plain</contentType>
+        <dataTypeBinary>false</dataTypeBinary>
+        <charset>UTF-8</charset>
+        <socketTimeout>30000</socketTimeout>
+      </properties>
+      <transformer version="4.5.2">
+        <elements/>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </transformer>
+      <responseTransformer version="4.5.2">
+        <elements>
+          <com.mirth.connect.plugins.javascriptstep.JavaScriptStep version="4.5.2">
+            <sequenceNumber>0</sequenceNumber>
+            <enabled>true</enabled>
+            <script>// msg to FHIR Bundle zawierający ServiceRequest
+
+try {
+    // Pobieramy ServiceRequest
+    var sr = msg[&apos;entry&apos;][0][&apos;resource&apos;];
+
+    var serviceRequestId = sr[&apos;id&apos;] || null;
+    var status = sr[&apos;status&apos;] || null;
+    var priorytet = sr[&apos;priority&apos;] || null;
+    var intent = sr[&apos;intent&apos;] || null;
+    var category = (sr[&apos;category&apos;] &amp;&amp; sr[&apos;category&apos;][0] &amp;&amp; sr[&apos;category&apos;][0][&apos;coding&apos;] &amp;&amp; sr[&apos;category&apos;][0][&apos;coding&apos;][0][&apos;display&apos;]) || null;
+    var code = (sr[&apos;code&apos;] &amp;&amp; sr[&apos;code&apos;][&apos;coding&apos;] &amp;&amp; sr[&apos;code&apos;][&apos;coding&apos;][0][&apos;display&apos;]) || null;
+    var authoredOn = sr[&apos;authoredOn&apos;] || null;
+    var reasonCode = (sr[&apos;reasonCode&apos;] &amp;&amp; sr[&apos;reasonCode&apos;][0] &amp;&amp; sr[&apos;reasonCode&apos;][0][&apos;text&apos;]) || null;
+    var note = (sr[&apos;note&apos;] &amp;&amp; sr[&apos;note&apos;][0] &amp;&amp; sr[&apos;note&apos;][0][&apos;text&apos;]) || null;
+    var patientRef = sr[&apos;subject&apos;] ? sr[&apos;subject&apos;][&apos;reference&apos;] : null;
+    
+    channelMap.put(&apos;pat&apos;, patientRef);  // zapis do channelMap
+    channelMap.put(&apos;serviceRequestId&apos;, serviceRequestId);
+    channelMap.put(&apos;status&apos;, status);
+    channelMap.put(&apos;intent&apos;, intent);
+    channelMap.put(&apos;category&apos;, category);
+    channelMap.put(&apos;code&apos;, code);
+    channelMap.put(&apos;authoredOn&apos;, authoredOn);
+    channelMap.put(&apos;reasonCode&apos;, reasonCode);
+    channelMap.put(&apos;note&apos;, note);
+    channelMap.put(&apos;priorytet&apos;, priorytet);
+    // Logowanie do debugu
+    logger.info(&quot;ServiceRequest ID: &quot; + serviceRequestId);
+    logger.info(&quot;Code: &quot; + code);
+    logger.info(&quot;Note: &quot; + note);
+    var sas = {
+        resourceType: &quot;ServiceRequest&quot;,
+        id: serviceRequestId,
+        status: &quot;draft&quot;
+    };
+
+    // Zamiana na JSON string
+    var sss = JSON.stringify(sas);
+
+    // Zapis do channelMap
+    channelMap.put(&apos;sss&apos;, sss);
+} catch (e) {
+    logger.error(&quot;Błąd w JavaScript Writer: &quot; + e);
+}</script>
+          </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+        </elements>
+        <inboundTemplate encoding="base64"></inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </responseTransformer>
+      <filter version="4.5.2">
+        <elements/>
+      </filter>
+      <transportName>HTTP Sender</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <waitForPrevious>true</waitForPrevious>
+    </connector>
+    <connector version="4.5.2">
+      <metaDataId>2</metaDataId>
+      <name>Destination 2</name>
+      <properties class="com.mirth.connect.connectors.http.HttpDispatcherProperties" version="4.5.2">
+        <pluginProperties/>
+        <destinationConnectorProperties version="4.5.2">
+          <queueEnabled>false</queueEnabled>
+          <sendFirst>false</sendFirst>
+          <retryIntervalMillis>10000</retryIntervalMillis>
+          <regenerateTemplate>false</regenerateTemplate>
+          <retryCount>0</retryCount>
+          <rotate>false</rotate>
+          <includeFilterTransformer>false</includeFilterTransformer>
+          <threadCount>1</threadCount>
+          <threadAssignmentVariable></threadAssignmentVariable>
+          <validateResponse>false</validateResponse>
+          <resourceIds class="linked-hash-map">
+            <entry>
+              <string>Default Resource</string>
+              <string>[Default Resource]</string>
+            </entry>
+          </resourceIds>
+          <queueBufferSize>1000</queueBufferSize>
+          <reattachAttachments>true</reattachAttachments>
+        </destinationConnectorProperties>
+        <host>http://192.168.1.39:8881/fhir/${pat}</host>
+        <useProxyServer>false</useProxyServer>
+        <proxyAddress></proxyAddress>
+        <proxyPort></proxyPort>
+        <method>get</method>
+        <headers class="linked-hash-map"/>
+        <parameters class="linked-hash-map"/>
+        <useHeadersVariable>false</useHeadersVariable>
+        <headersVariable></headersVariable>
+        <useParametersVariable>false</useParametersVariable>
+        <parametersVariable></parametersVariable>
+        <responseXmlBody>false</responseXmlBody>
+        <responseParseMultipart>true</responseParseMultipart>
+        <responseIncludeMetadata>false</responseIncludeMetadata>
+        <responseBinaryMimeTypes>application/.*(?&lt;!json|xml)$|image/.*|video/.*|audio/.*</responseBinaryMimeTypes>
+        <responseBinaryMimeTypesRegex>true</responseBinaryMimeTypesRegex>
+        <multipart>false</multipart>
+        <useAuthentication>false</useAuthentication>
+        <authenticationType>Basic</authenticationType>
+        <usePreemptiveAuthentication>false</usePreemptiveAuthentication>
+        <username></username>
+        <password></password>
+        <content></content>
+        <contentType>text/plain</contentType>
+        <dataTypeBinary>false</dataTypeBinary>
+        <charset>UTF-8</charset>
+        <socketTimeout>30000</socketTimeout>
+      </properties>
+      <transformer version="4.5.2">
+        <elements/>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </transformer>
+      <responseTransformer version="4.5.2">
+        <elements>
+          <com.mirth.connect.plugins.javascriptstep.JavaScriptStep version="4.5.2">
+            <sequenceNumber>0</sequenceNumber>
+            <enabled>true</enabled>
+            <script>// msg jest JSON-em Pacjenta
+try {
+    // --- ID pacjenta ---
+    var patientId = msg[&apos;id&apos;] || null;
+    channelMap.put(&apos;patientId&apos;, patientId);
+
+    // --- MRN (identifier) ---
+    var mrn = (msg[&apos;identifier&apos;] &amp;&amp; msg[&apos;identifier&apos;][0] &amp;&amp; msg[&apos;identifier&apos;][0][&apos;value&apos;]) || null;
+    channelMap.put(&apos;mrn&apos;, mrn);
+
+    // --- Nazwisko ---
+    var lastName = (msg[&apos;name&apos;] &amp;&amp; msg[&apos;name&apos;][0] &amp;&amp; msg[&apos;name&apos;][0][&apos;family&apos;]) || null;
+    channelMap.put(&apos;lastName&apos;, lastName);
+
+    // --- Imię ---
+    var firstName = (msg[&apos;name&apos;] &amp;&amp; msg[&apos;name&apos;][0] &amp;&amp; msg[&apos;name&apos;][0][&apos;given&apos;] &amp;&amp; msg[&apos;name&apos;][0][&apos;given&apos;][0]) || null;
+    channelMap.put(&apos;firstName&apos;, firstName);
+
+    // --- Prefix (np. Pan/Pani) ---
+    var prefix = (msg[&apos;name&apos;] &amp;&amp; msg[&apos;name&apos;][0] &amp;&amp; msg[&apos;name&apos;][0][&apos;prefix&apos;] &amp;&amp; msg[&apos;name&apos;][0][&apos;prefix&apos;][0]) || null;
+    channelMap.put(&apos;prefix&apos;, prefix);
+
+    // --- Telefon ---
+    var phone = (msg[&apos;telecom&apos;] &amp;&amp; msg[&apos;telecom&apos;][0] &amp;&amp; msg[&apos;telecom&apos;][0][&apos;value&apos;]) || null;
+    channelMap.put(&apos;phone&apos;, phone);
+
+    // --- Płeć ---
+    var gender = msg[&apos;gender&apos;] || null;
+    channelMap.put(&apos;gender&apos;, gender);
+
+    // --- Data urodzenia ---
+    var birthDate = msg[&apos;birthDate&apos;] || null;
+    channelMap.put(&apos;birthDate&apos;, birthDate);
+
+    // --- Adres ---
+    var addressLine = (msg[&apos;address&apos;] &amp;&amp; msg[&apos;address&apos;][0] &amp;&amp; msg[&apos;address&apos;][0][&apos;line&apos;] &amp;&amp; msg[&apos;address&apos;][0][&apos;line&apos;][0]) || null;
+    var city = (msg[&apos;address&apos;] &amp;&amp; msg[&apos;address&apos;][0] &amp;&amp; msg[&apos;address&apos;][0][&apos;city&apos;]) || null;
+    var postalCode = (msg[&apos;address&apos;] &amp;&amp; msg[&apos;address&apos;][0] &amp;&amp; msg[&apos;address&apos;][0][&apos;postalCode&apos;]) || null;
+    var country = (msg[&apos;address&apos;] &amp;&amp; msg[&apos;address&apos;][0] &amp;&amp; msg[&apos;address&apos;][0][&apos;country&apos;]) || null;
+
+    channelMap.put(&apos;addressLine&apos;, addressLine);
+    channelMap.put(&apos;city&apos;, city);
+    channelMap.put(&apos;postalCode&apos;, postalCode);
+    channelMap.put(&apos;country&apos;, country);
+
+} catch (e) {
+    logger.error(&quot;Błąd przy wyciąganiu danych pacjenta: &quot; + e);
+}</script>
+          </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+        </elements>
+        <inboundTemplate encoding="base64"></inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </responseTransformer>
+      <filter version="4.5.2">
+        <elements/>
+      </filter>
+      <transportName>HTTP Sender</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <waitForPrevious>true</waitForPrevious>
+    </connector>
+    <connector version="4.5.2">
+      <metaDataId>3</metaDataId>
+      <name>Destination 3</name>
+      <properties class="com.mirth.connect.connectors.js.JavaScriptDispatcherProperties" version="4.5.2">
+        <pluginProperties/>
+        <destinationConnectorProperties version="4.5.2">
+          <queueEnabled>false</queueEnabled>
+          <sendFirst>false</sendFirst>
+          <retryIntervalMillis>10000</retryIntervalMillis>
+          <regenerateTemplate>false</regenerateTemplate>
+          <retryCount>0</retryCount>
+          <rotate>false</rotate>
+          <includeFilterTransformer>false</includeFilterTransformer>
+          <threadCount>1</threadCount>
+          <threadAssignmentVariable></threadAssignmentVariable>
+          <validateResponse>false</validateResponse>
+          <resourceIds class="linked-hash-map">
+            <entry>
+              <string>Default Resource</string>
+              <string>[Default Resource]</string>
+            </entry>
+          </resourceIds>
+          <queueBufferSize>1000</queueBufferSize>
+          <reattachAttachments>true</reattachAttachments>
+        </destinationConnectorProperties>
+        <script>var dbConn;
+
+try {
+    // KONFIGURACJA POŁĄCZENIA
+    dbConn = DatabaseConnectionFactory.createDatabaseConnection(
+        &apos;com.mysql.cj.jdbc.Driver&apos;,
+        &apos;jdbc:mysql://192.168.1.38:3306/risdb&apos;,
+        &apos;root&apos;,
+        &apos;rootpassword123&apos;
+    );
+
+    // =========================
+    // INSERT / UPDATE PATIENT
+    // =========================
+
+    var sqlPatient = &quot;&quot;
+        + &quot;INSERT INTO patient (&quot;
+        + &quot;patient_id, family_name, given_name, prefix, gender, birth_date, &quot;
+        + &quot;address_line, city, postal_code, country, phone, mrn) &quot;
+        + &quot;VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) &quot;
+        + &quot;ON DUPLICATE KEY UPDATE &quot;
+        + &quot;family_name = VALUES(family_name), &quot;
+        + &quot;given_name = VALUES(given_name), &quot;
+        + &quot;phone = VALUES(phone)&quot;;
+
+    dbConn.executeUpdate(sqlPatient, [
+        channelMap.get(&apos;patientId&apos;),
+        channelMap.get(&apos;lastName&apos;),
+        channelMap.get(&apos;firstName&apos;),
+        channelMap.get(&apos;prefix&apos;),
+        channelMap.get(&apos;gender&apos;),
+        channelMap.get(&apos;birthDate&apos;),
+        channelMap.get(&apos;addressLine&apos;),
+        channelMap.get(&apos;city&apos;),
+        channelMap.get(&apos;postalCode&apos;),
+        channelMap.get(&apos;country&apos;),
+        channelMap.get(&apos;phone&apos;),
+        channelMap.get(&apos;mrn&apos;)
+    ]);
+
+
+    // =========================
+    // INSERT SERVICE REQUEST
+    // =========================
+
+    var sqlSR = &quot;&quot;
+        + &quot;INSERT INTO service_request (&quot;
+        + &quot;service_request_id, patient_id, status, intent, category, &quot;
+        + &quot;code, authored_on, report_text, note, priority) &quot;
+        + &quot;VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)&quot;;
+
+    dbConn.executeUpdate(sqlSR, [
+        channelMap.get(&apos;serviceRequestId&apos;),
+        channelMap.get(&apos;patientId&apos;),
+        channelMap.get(&apos;status&apos;),
+        channelMap.get(&apos;intent&apos;),
+        channelMap.get(&apos;category&apos;),
+        channelMap.get(&apos;code&apos;),
+        channelMap.get(&apos;authoredOn&apos;),
+        channelMap.get(&apos;reportText&apos;),
+        channelMap.get(&apos;note&apos;),
+        channelMap.get(&apos;priorytet&apos;)
+    ]);
+
+    logger.info(&quot;Patient i ServiceRequest zapisane poprawnie.&quot;);
+
+} catch (e) {
+    logger.error(&quot;Błąd zapisu do bazy: &quot; + e);
+    throw e;
+} finally {
+    if (dbConn) { 
+        dbConn.close();
+    }
+}
+</script>
+      </properties>
+      <transformer version="4.5.2">
+        <elements/>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </transformer>
+      <responseTransformer version="4.5.2">
+        <elements/>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </responseTransformer>
+      <filter version="4.5.2">
+        <elements/>
+      </filter>
+      <transportName>JavaScript Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <waitForPrevious>true</waitForPrevious>
+    </connector>
+    <connector version="4.5.2">
+      <metaDataId>5</metaDataId>
+      <name>Destination 4</name>
+      <properties class="com.mirth.connect.connectors.http.HttpDispatcherProperties" version="4.5.2">
+        <pluginProperties/>
+        <destinationConnectorProperties version="4.5.2">
+          <queueEnabled>false</queueEnabled>
+          <sendFirst>false</sendFirst>
+          <retryIntervalMillis>10000</retryIntervalMillis>
+          <regenerateTemplate>false</regenerateTemplate>
+          <retryCount>0</retryCount>
+          <rotate>false</rotate>
+          <includeFilterTransformer>false</includeFilterTransformer>
+          <threadCount>1</threadCount>
+          <threadAssignmentVariable></threadAssignmentVariable>
+          <validateResponse>false</validateResponse>
+          <resourceIds class="linked-hash-map">
+            <entry>
+              <string>Default Resource</string>
+              <string>[Default Resource]</string>
+            </entry>
+          </resourceIds>
+          <queueBufferSize>1000</queueBufferSize>
+          <reattachAttachments>true</reattachAttachments>
+        </destinationConnectorProperties>
+        <host>http://192.168.1.39:8881/fhir/ServiceRequest/${serviceRequestId}</host>
+        <useProxyServer>false</useProxyServer>
+        <proxyAddress></proxyAddress>
+        <proxyPort></proxyPort>
+        <method>put</method>
+        <headers class="linked-hash-map"/>
+        <parameters class="linked-hash-map"/>
+        <useHeadersVariable>false</useHeadersVariable>
+        <headersVariable></headersVariable>
+        <useParametersVariable>false</useParametersVariable>
+        <parametersVariable></parametersVariable>
+        <responseXmlBody>false</responseXmlBody>
+        <responseParseMultipart>true</responseParseMultipart>
+        <responseIncludeMetadata>false</responseIncludeMetadata>
+        <responseBinaryMimeTypes>application/.*(?&lt;!json|xml)$|image/.*|video/.*|audio/.*</responseBinaryMimeTypes>
+        <responseBinaryMimeTypesRegex>true</responseBinaryMimeTypesRegex>
+        <multipart>false</multipart>
+        <useAuthentication>false</useAuthentication>
+        <authenticationType>Basic</authenticationType>
+        <usePreemptiveAuthentication>false</usePreemptiveAuthentication>
+        <username></username>
+        <password></password>
+        <content>${sss}</content>
+        <contentType>application/fhir+json</contentType>
+        <dataTypeBinary>false</dataTypeBinary>
+        <charset>UTF-8</charset>
+        <socketTimeout>30000</socketTimeout>
+      </properties>
+      <transformer version="4.5.2">
+        <elements/>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </transformer>
+      <responseTransformer version="4.5.2">
+        <elements>
+          <com.mirth.connect.plugins.javascriptstep.JavaScriptStep version="4.5.2">
+            <sequenceNumber>0</sequenceNumber>
+            <enabled>true</enabled>
+            <script>// msg jest JSON-em Pacjenta
+try {
+    // --- ID pacjenta ---
+    var patientId = msg[&apos;id&apos;] || null;
+    channelMap.put(&apos;patientId&apos;, patientId);
+
+    // --- MRN (identifier) ---
+    var mrn = (msg[&apos;identifier&apos;] &amp;&amp; msg[&apos;identifier&apos;][0] &amp;&amp; msg[&apos;identifier&apos;][0][&apos;value&apos;]) || null;
+    channelMap.put(&apos;mrn&apos;, mrn);
+
+    // --- Nazwisko ---
+    var lastName = (msg[&apos;name&apos;] &amp;&amp; msg[&apos;name&apos;][0] &amp;&amp; msg[&apos;name&apos;][0][&apos;family&apos;]) || null;
+    channelMap.put(&apos;lastName&apos;, lastName);
+
+    // --- Imię ---
+    var firstName = (msg[&apos;name&apos;] &amp;&amp; msg[&apos;name&apos;][0] &amp;&amp; msg[&apos;name&apos;][0][&apos;given&apos;] &amp;&amp; msg[&apos;name&apos;][0][&apos;given&apos;][0]) || null;
+    channelMap.put(&apos;firstName&apos;, firstName);
+
+    // --- Prefix (np. Pan/Pani) ---
+    var prefix = (msg[&apos;name&apos;] &amp;&amp; msg[&apos;name&apos;][0] &amp;&amp; msg[&apos;name&apos;][0][&apos;prefix&apos;] &amp;&amp; msg[&apos;name&apos;][0][&apos;prefix&apos;][0]) || null;
+    channelMap.put(&apos;prefix&apos;, prefix);
+
+    // --- Telefon ---
+    var phone = (msg[&apos;telecom&apos;] &amp;&amp; msg[&apos;telecom&apos;][0] &amp;&amp; msg[&apos;telecom&apos;][0][&apos;value&apos;]) || null;
+    channelMap.put(&apos;phone&apos;, phone);
+
+    // --- Płeć ---
+    var gender = msg[&apos;gender&apos;] || null;
+    channelMap.put(&apos;gender&apos;, gender);
+
+    // --- Data urodzenia ---
+    var birthDate = msg[&apos;birthDate&apos;] || null;
+    channelMap.put(&apos;birthDate&apos;, birthDate);
+
+    // --- Adres ---
+    var addressLine = (msg[&apos;address&apos;] &amp;&amp; msg[&apos;address&apos;][0] &amp;&amp; msg[&apos;address&apos;][0][&apos;line&apos;] &amp;&amp; msg[&apos;address&apos;][0][&apos;line&apos;][0]) || null;
+    var city = (msg[&apos;address&apos;] &amp;&amp; msg[&apos;address&apos;][0] &amp;&amp; msg[&apos;address&apos;][0][&apos;city&apos;]) || null;
+    var postalCode = (msg[&apos;address&apos;] &amp;&amp; msg[&apos;address&apos;][0] &amp;&amp; msg[&apos;address&apos;][0][&apos;postalCode&apos;]) || null;
+    var country = (msg[&apos;address&apos;] &amp;&amp; msg[&apos;address&apos;][0] &amp;&amp; msg[&apos;address&apos;][0][&apos;country&apos;]) || null;
+
+    channelMap.put(&apos;addressLine&apos;, addressLine);
+    channelMap.put(&apos;city&apos;, city);
+    channelMap.put(&apos;postalCode&apos;, postalCode);
+    channelMap.put(&apos;country&apos;, country);
+
+} catch (e) {
+    logger.error(&quot;Błąd przy wyciąganiu danych pacjenta: &quot; + e);
+}</script>
+          </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+        </elements>
+        <inboundTemplate encoding="base64"></inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.5.2">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.5.2">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </responseTransformer>
+      <filter version="4.5.2">
+        <elements/>
+      </filter>
+      <transportName>HTTP Sender</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <waitForPrevious>true</waitForPrevious>
+    </connector>
+  </destinationConnectors>
+  <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+  <postprocessingScript>// This script executes once after a message has been processed
+// Responses returned from here will be stored as &quot;Postprocessor&quot; in the response map
+return;</postprocessingScript>
+  <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</deployScript>
+  <undeployScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</undeployScript>
+  <properties version="4.5.2">
+    <clearGlobalChannelMap>true</clearGlobalChannelMap>
+    <messageStorageMode>DEVELOPMENT</messageStorageMode>
+    <encryptData>false</encryptData>
+    <encryptAttachments>false</encryptAttachments>
+    <encryptCustomMetaData>false</encryptCustomMetaData>
+    <removeContentOnCompletion>false</removeContentOnCompletion>
+    <removeOnlyFilteredOnCompletion>false</removeOnlyFilteredOnCompletion>
+    <removeAttachmentsOnCompletion>false</removeAttachmentsOnCompletion>
+    <initialState>STARTED</initialState>
+    <storeAttachments>true</storeAttachments>
+    <metaDataColumns>
+      <metaDataColumn>
+        <name>SOURCE</name>
+        <type>STRING</type>
+        <mappingName>mirth_source</mappingName>
+      </metaDataColumn>
+      <metaDataColumn>
+        <name>TYPE</name>
+        <type>STRING</type>
+        <mappingName>mirth_type</mappingName>
+      </metaDataColumn>
+    </metaDataColumns>
+    <attachmentProperties version="4.5.2">
+      <type>None</type>
+      <properties/>
+    </attachmentProperties>
+    <resourceIds class="linked-hash-map">
+      <entry>
+        <string>Default Resource</string>
+        <string>[Default Resource]</string>
+      </entry>
+    </resourceIds>
+  </properties>
+  <exportData>
+    <metadata>
+      <enabled>true</enabled>
+      <lastModified>
+        <time>1771187574323</time>
+        <timezone>Europe/Warsaw</timezone>
+      </lastModified>
+      <pruningSettings>
+        <archiveEnabled>true</archiveEnabled>
+        <pruneErroredMessages>false</pruneErroredMessages>
+      </pruningSettings>
+      <userId>1</userId>
+    </metadata>
+  </exportData>
+</channel>
