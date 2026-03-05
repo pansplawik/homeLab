@@ -37,3 +37,6 @@ Konto technika należąca do UO Technika:
 
 ## Polityki bezpieczeństwa
 ![alt text](image.png)
+
+## IIS - hostowanie strony za pomocą Web Serwera
+![alt text](image-4.png)
