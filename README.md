@@ -1,4 +1,5 @@
 #  Portfolio/ HomeLab - symulacja architektury IT Szpitala
+[English abstract here.](/Abstract.md)
 ## Analityczne podejście
 
 Informatyczny system szpitalny charakteryzuje się wysokim poziomem złożoności. Składa się on z wielu współpracujących ze sobą komponentów, takich jak wirtualizowane lub skonteneryzowane aplikacje medyczne i szpitalne, systemy monitorujące pracę całej infrastruktury oraz urządzenia i mechanizmy odpowiedzialne za bezpieczeństwo.
