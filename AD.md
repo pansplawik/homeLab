@@ -32,18 +32,18 @@ Zgodnie z powyższymi regułami utworzono dwa udziały
 - RTG$
 
 Poniższy obraz przedstawia widok dla użytkownika, który ma dostęp jedynie do `RTG$`. Mimo, że widzi drugi udział nie może do niego wejść.
-![alt text](image-2.png)
+![alt text](zdj/dyski.png)
 
 ## Utworzeni użytkownicy
 Każdy dostęp do komputera oraz jego zasobów musi być możliwy w przypadku posiadania odpowiedniego konta. Bez niego dostęp nie jest możliwy.
 W tym celu utworzono następujących użytkowników:
 Administratorzy, którzy zostali również wpisani do grupy administratorów domeny:
 
-![alt text](image-1.png)
+![alt text](zdj/adminuser.png)
 
 Konto technika należąca do jednostki organizacyjnej `technik` z przydzielonymi do tej grupy dostępami oraz politykami:
 
-![alt text](image-3.png)
+![alt text](zdj/techniktechnik.png)
 
 ## Polityki bezpieczeństwa
 Nieodłącznym elementem prawidłowego zarządzania domeną jest efektywne zarządzanie bezpieczeństwem, a co za tym idzie politykami bezpieczeństwa i dostępu. 
@@ -53,9 +53,9 @@ Zgodnie z nimi regularny pracownik nie powinien mieć dostępu do wielu poufnych
 - zablokowany dostęp do CMD - jest to dodatkowa blokada przeciwko bardziej doświadcoznych użytkowników, blokująca możliwość tworzenia i uruchamiania nieporządanych skryptów.
   
 Wygląd utworzonych polityk dostępów pzedstawia poniższa ilustacja
-![alt text](image.png)
+![alt text](zdj/policy.png)
 
 ## IIS - hostowanie strony za pomocą Web Serwera
 Windows Server udostępnia możliwość hostowania stron webowych. W przypadku tego laboratorium i powiązania jego z całym homelabem wykorzystan go do hostowania prostej strony startowej z listą aplikacji wykorzystywanych przez regularnych pracownik ZDO. 
 Szablon strony hostowany na serwerze przedstawia poniższa ilustracja:
-![alt text](image-4.png)
+![alt text](zdj/iis.png)
