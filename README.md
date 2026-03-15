@@ -18,6 +18,9 @@ Proxmox VE został również wykorzystany do klasycznej wirtualizacji systemów 
 
 Współczesne systemy IT coraz częściej opierają się na rozwiązaniach chmurowych, odchodząc od utrzymywania całej infrastruktury w lokalnych centrach danych. W prezentowanym projekcie zastosowano **model hybrydowy**, łączący infrastrukturę lokalną z zasobami zewnętrznymi. W tym celu wykorzystano serwer **VPS**, który pełni kilka istotnych funkcji. Jedną z nich jest rola **repozytorium kopii zapasowych**, zgodnie z zasadą **3-2-1 backup**. [Więcej szczegółów znajduje się tutaj.](/VPS.md)
 
+Większość komputerów wykorzystywanych w szpitalach mają OS typu Windows. W celu sprawnej administracji powstało laboratorium symulujące wykorzystanie Windows Serwer 2019 oraz kluczowe funkcje Active Directory, wykorzystywane w większości szpitali. [Więcej szczegółów znajduje się tutaj.](/AD.md)
+
 Nieodłącznym elementem architektury IT szpitala są systemy zarządzające danymi medycznymi pacjentów. Systemy szpitalne oraz specyficnze systemy posiadają różne specyfikacje techniczne, ale do integracji wykorzystują te same protokoły. [Na zapotrzebowanie zaznajomienia się z funkcjonowaniem systemów i integracji stworzono laboratorium opisane tutaj.](/FHIR.md)
 
-Ciekawym projektem dodatkowym projektem zrobionym w ramach tego homelaba jest projekt IoT, wykorzystujący wiedzę z zakresu składania układów elektronicznych z mikrokontrolerami oraz znajomością protokołów przesyłania danych przekonwertowanych w ramach ADC. [Otworzony układ eletorniczny wykorzystane aplikacje oraz działanie protokołu MQTT opsiane jest w tym rozdziale.](/mqtt.md)
+Ciekawym projektem dodatkowym projektem zrobionym w ramach tego homelaba jest projekt IoT, wykorzystujący wiedzę z zakresu składania układów elektronicznych z mikrokontrolerami oraz znajomością protokołów przesyłania danych przekonwertowanych w ramach ADC. [Utworzony układ eletorniczny wykorzystane aplikacje oraz działanie protokołu MQTT opsiane jest w tym rozdziale.](/mqtt.md)
+
