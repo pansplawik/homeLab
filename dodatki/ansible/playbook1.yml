@@ -1,0 +1,77 @@
+---
+- name: Configure webserver with Nginx and TLS
+  hosts: nginx
+  become: true
+  gather_facts: false
+  vars_files:
+    - ../group_vars/all.yml
+  vars:
+    tls_dir: /etc/nginx/ssl/
+    key_file: nginx.key
+    cert_file: nginx.crt
+    conf_file: /etc/nginx/sites-available/default
+    server_name: localhost
+  handlers:
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted
+  tasks:
+    - name: Ensure nginx is installed
+      package:
+        name: nginx
+        state: present
+        update_cache: true
+      notify: Restart nginx
+
+    - name: Create directories for TLS certificates
+      file:
+        path: "{{ tls_dir }}"
+        state: directory
+        mode: '0750'
+      notify: Restart nginx
+
+    - name: Generate self-signed TLS certificate
+          command: >
+        openssl req -x509 -nodes -days 365 -newkey rsa:2048
+        -keyout {{ tls_dir }}/{{ key_file }}
+        -out {{ tls_dir }}/{{ cert_file }}
+        -subj "/CN={{ server_name }}"
+      args:
+        creates: "{{ tls_dir }}/{{ cert_file }}"
+      notify: Restart nginx
+
+    - name: Manage nginx config template
+      template:
+        src: "../templates/nginx.conf.j2"
+        dest: "{{ conf_file }}"
+        mode: '0644'
+      notify: Restart nginx
+    - name: Enable configuration
+      file:
+        src: /etc/nginx/sites-available/default
+        dest: /etc/nginx/sites-enabled/default
+        state: link
+
+    - name: Install home page
+      template:
+        src: "../templates/index.html.j2"
+        dest: /var/www/html/index.html
+        mode: '0644'
+
+    - name: Restart nginx
+      meta: flush_handlers
+
+    - name: Test docker apps
+      uri:
+        url: "https://localhost/{{ item.name }}/"
+        validate_certs: false
+                status_code: 200
+      loop: "{{ docker_apps }}"
+
+    - name: Test other apps
+      uri:
+        url: "https://localhost/{{ item.path }}/"
+        validate_certs: false
+        status_code: 200
+      loop: "{{ external_proxies }}"

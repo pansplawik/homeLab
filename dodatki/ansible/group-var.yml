@@ -1,0 +1,31 @@
+external_proxies:
+  - path: /orthanc/
+    url: http://192.168.1.38:8042/
+    proto: https
+    redirect: false
+
+  - path: /zabbix/
+    url: http://192.168.1.35:80/
+    proto: http
+
+  - path: /portainer/
+    url: http://192.168.1.35:9990/
+    proto: http
+
+  - path: /fhir/
+    url: http://192.168.1.39:8080/
+    proto: http
+
+  - path: /pseudoris/
+    url: http://192.168.1.38:5000/
+    proto: http
+
+docker_apps:
+  - name: simpleapp
+    port: 5000
+
+  - name: innaapp
+    port: 5500
+
+  - name: testapi
+    port: 5555

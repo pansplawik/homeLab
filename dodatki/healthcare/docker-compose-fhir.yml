@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: hapi-postgres
+    environment:
+      POSTGRES_USER: hapi
+      POSTGRES_PASSWORD: hapi
+      POSTGRES_DB: hapi
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - "5432:5432"
+
+  hapi-fhir:
+    image: hapiproject/hapi:latest
+    container_name: hapi-fhir
+    depends_on:
+      - postgres
+    environment:
+      # Spring Boot settings for PostgreSQL
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hapi
+      SPRING_DATASOURCE_USERNAME: hapi
+      SPRING_DATASOURCE_PASSWORD: hapi
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+    ports:
+      - "8881:8080"
+    restart: always
+
+volumes:
+  postgres_data:

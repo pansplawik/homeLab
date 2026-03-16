@@ -1,0 +1,31 @@
+---
+- name: "Deploy grafana and prometheus"
+  hosts: monitoring
+  gather_facts: false
+
+  tasks:
+    - name: "Manage nginx config template"
+      template:
+        src: "../templates/prometheus.yml"
+        dest: "/root/grafprom/prometheus.yml"
+        mode: '0644'
+
+    - name: "Stop Docker services"
+      command: >
+        docker compose
+        down
+        -v
+      args:
+        chdir: "/root/grafprom/"
+    - name: "Start Docker services"
+      command: >
+        docker compose
+        up
+        -d
+      args:
+        chdir: "/root/grafprom/"
+    - name: "Test prometheus"
+      uri:
+        url: http://192.168.1.35:9090/
+        validate_certs: false
+        status_code: 200

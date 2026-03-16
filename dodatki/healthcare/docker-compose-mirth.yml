@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  mirth:
+    image: nextgenhealthcare/connect:latest
+    container_name: mirth
+    ports:
+      - "8080:8080"   # Web Admin
+      - "8443:8443"   # HTTPS Admin
+      - "60000-60010:60000-60010"  # TCP HL7 (kana ^by)
+    environment:
+      TZ: Europe/Warsaw
+      DATABASE_TYPE: postgresql
+      DATABASE_SERVER: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: mirthdb
+      DATABASE_USER: mirth
+      DATABASE_PASSWORD: mirth_pass
+      MIRTH_ADMIN_PASSWORD: admin123
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15
+    container_name: mirth-db
+    environment:
+      POSTGRES_DB: mirthdb
+      POSTGRES_USER: mirth
+      POSTGRES_PASSWORD: mirth_pass
+    volumes:
+      - mirth-db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  mirth-db-data:

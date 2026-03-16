@@ -1,0 +1,9 @@
+services:
+  influxdb:
+    image: influxdb:2
+    container_name: influxdb
+    ports:
+      - "40251:8086"
+    volumes:
+      - ./influxdb:/var/lib/influxdb2
+    restart: unless-stopped

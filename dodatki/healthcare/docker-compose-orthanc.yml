@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: orthanc-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword123   # Zmie ^d na bezpieczne has ^bo
+      MYSQL_DATABASE: orthanc
+      MYSQL_USER: orthanc
+      MYSQL_PASSWORD: orthancpass123         # Zmie ^d na bezpieczne has ^bo
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+
+  orthanc:
+    image: orthancteam/orthanc:latest
+    container_name: orthanc
+    depends_on:
+      - mysql
+    ports:
+      - "4242:4242"   # DICOM
+      - "8042:8042"   # Web UI / REST API
+    volumes:
+      - orthanc-data:/var/lib/orthanc/db
+    environment:
+      ORTHANC__NAME: "Orthanc"
+      ORTHANC__DICOM_SERVER_ENABLED: "true"
+      ORTHANC__DICOM_PORT: "4242"
+      ORTHANC__HTTP_SERVER_ENABLED: "true"
+      ORTHANC__HTTP_PORT: "8042"
+      ORTHANC__AUTHENTICATION_ENABLED: "false"
+      ORTHANC__REMOTE_ACCESS_ALLOWED: "true"
+      ORTHANC__MySQL__Enable: "true"
+      ORTHANC__MySQL__Host: "mysql"
+      ORTHANC__MySQL__Port: "3306"
+      ORTHANC__MySQL__Database: "orthanc"
+      ORTHANC__MySQL__Username: "orthanc"
+      ORTHANC__MySQL__Password: "orthancpass123"
+    restart: unless-stopped
+
+volumes:
+  orthanc-data:
+  mysql-data:
