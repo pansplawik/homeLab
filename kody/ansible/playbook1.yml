@@ -32,7 +32,7 @@
       notify: Restart nginx
 
     - name: Generate self-signed TLS certificate
-          command: >
+      command: >
         openssl req -x509 -nodes -days 365 -newkey rsa:2048
         -keyout {{ tls_dir }}/{{ key_file }}
         -out {{ tls_dir }}/{{ cert_file }}
@@ -66,7 +66,7 @@
       uri:
         url: "https://localhost/{{ item.name }}/"
         validate_certs: false
-                status_code: 200
+        status_code: 200
       loop: "{{ docker_apps }}"
 
     - name: Test other apps

@@ -1,26 +1,82 @@
-#  Portfolio/ HomeLab - symulacja architektury IT Szpitala
+# HomeLab - Symulacja infrastruktury IT szpitala
+
 [English abstract here.](/Abstract.md)
-## Analityczne podejście
 
-Informatyczny system szpitalny charakteryzuje się wysokim poziomem złożoności. Składa się on z wielu współpracujących ze sobą komponentów, takich jak wirtualizowane lub skonteneryzowane aplikacje medyczne i szpitalne, systemy monitorujące pracę całej infrastruktury oraz urządzenia i mechanizmy odpowiedzialne za bezpieczeństwo.
+## Opis projektu
 
-Ze względu na krytyczny charakter przetwarzanych danych oraz konieczność zapewnienia wysokiej dostępności usług, projektowanie takiego systemu wymaga analitycznego podejścia. Każdy element infrastruktury musi być oceniany pod kątem wydajności, niezawodności, bezpieczeństwa oraz możliwości skalowania.
+Projekt przedstawia symulację infrastruktury IT szpitala, obejmującą systemy medyczne (PACS, RIS, HIS), integrację danych (HL7, FHIR, DICOM), monitoring, telemetrykę IoT oraz środowisko hybrydowe.
 
-Szczególną uwagę zwrócono na logiczny podział systemu na warstwy funkcjonalne, co ułatwia zarządzanie, diagnostykę oraz dalszy rozwój infrastruktury. Zastosowanie wirtualizacji i konteneryzacji pozwala na izolację usług, ograniczenie wpływu awarii pojedynczego komponentu oraz efektywniejsze wykorzystanie zasobów sprzętowych.
+Celem projektu jest odwzorowanie rzeczywistej architektury systemów medycznych z uwzględnieniem:
 
-Dodatkowo uwzględniono mechanizmy monitoringu i logowania, które umożliwiają bieżącą analizę stanu systemu oraz szybką reakcję na potencjalne nieprawidłowości. Całość rozwiązania została zaprojektowana z myślą o spełnieniu wymagań systemów medycznych, takich jak ciągłość działania, integralność danych oraz zgodność z obowiązującymi standardami bezpieczeństwa.
-## Ogólna specyfikacja techniczna
-W celu stworzenia kompletnego i niskobudżetowego projektu wykorzystano sprawdzone, otwartoźródłowe rozwiązania dostępne na rynku. Kluczowym elementem infrastruktury jest hypervisor **KVM** w postaci platformy **Proxmox VE**. Jest to system do wirtualizacji, który umożliwia jednoczesne zarządzanie maszynami wirtualnymi (VM) oraz kontenerami aplikacyjnymi (LXC) z poziomu jednego środowiska.
+- integracji systemów
+- przepływu danych medycznych
+- niezawodności i monitoringu infrastruktury
+- wirtualizacji i konteneryzacji
 
-Jednym z głównych powodów wyboru Proxmox VE jest natywna obsługa **konteneryzacji LXC**. Rozwiązanie to sprawdza się idealnie w przypadku uruchamiania pojedynczych aplikacji lub lekkich usług, gdzie nie ma potrzeby tworzenia pełnych maszyn wirtualnych. Kontenery charakteryzują się mniejszym narzutem na zasoby oraz szybszym czasem uruchamiania. Takie podejście zostało zastosowane m.in. przy budowie systemu **PACS** oraz integracji pomiędzy innymi systemami. [Zostało to opisane tutaj.](/LXC.md)
+---
 
-Proxmox VE został również wykorzystany do klasycznej wirtualizacji systemów Linux, takich jak **Ubuntu Server**. Jedną z kluczowych maszyn wirtualnych jest VM odpowiedzialna za uruchamianie skonteneryzowanych aplikacji służących do **monitorowania działania całej infrastruktury**. Szczegóły tego rozwiązania zostały opisane w dedykowanym rozdziale. [Opisane w tym rozdziale.](/VM.md)
+## Architektura
 
-Współczesne systemy IT coraz częściej opierają się na rozwiązaniach chmurowych, odchodząc od utrzymywania całej infrastruktury w lokalnych centrach danych. W prezentowanym projekcie zastosowano **model hybrydowy**, łączący infrastrukturę lokalną z zasobami zewnętrznymi. W tym celu wykorzystano serwer **VPS**, który pełni kilka istotnych funkcji. Jedną z nich jest rola **repozytorium kopii zapasowych**, zgodnie z zasadą **3-2-1 backup**. [Więcej szczegółów znajduje się tutaj.](/VPS.md)
+System został zaprojektowany w oparciu o podejście warstwowe:
 
-Większość komputerów wykorzystywanych w szpitalach mają OS typu Windows. W celu sprawnej administracji powstało laboratorium symulujące wykorzystanie Windows Serwer 2019 oraz kluczowe funkcje Active Directory, wykorzystywane w większości szpitali. [Więcej szczegółów znajduje się tutaj.](/AD.md)
+- **Infrastruktura**: Proxmox VE (KVM, LXC, VM)
+- **Aplikacje**: Docker, kontenery LXC
+- **Systemy medyczne**: FHIR HIS, Mirth Connect, RIS, PACS (Orthanc)
+- **Integracja**: HL7, FHIR, DICOM
+- **Monitoring**: Prometheus, Grafana, Loki
+- **IoT**: MQTT, ESP32, InfluxDB
+- **Backup**: VPS + Nextcloud (zasada 3-2-1)
 
-Nieodłącznym elementem architektury IT szpitala są systemy zarządzające danymi medycznymi pacjentów. Systemy szpitalne oraz specyficnze systemy posiadają różne specyfikacje techniczne, ale do integracji wykorzystują te same protokoły. [Na zapotrzebowanie zaznajomienia się z funkcjonowaniem systemów i integracji stworzono laboratorium opisane tutaj.](/FHIR.md)
+Szczegółowe schematy:  
+[Schematy.md](./Schematy.md)
 
-Ciekawym projektem dodatkowym projektem zrobionym w ramach tego homelaba jest projekt IoT, wykorzystujący wiedzę z zakresu składania układów elektronicznych z mikrokontrolerami oraz znajomością protokołów przesyłania danych przekonwertowanych w ramach ADC. [Utworzony układ eletorniczny wykorzystane aplikacje oraz działanie protokołu MQTT opsiane jest w tym rozdziale.](/mqtt.md)
+---
 
+## Technologie
+
+- Proxmox VE (KVM, LXC)
+- Docker / Docker Compose
+- Mirth Connect
+- Orthanc (PACS)
+- HL7 / FHIR / DICOM
+- Prometheus + Grafana + Loki
+- MQTT (Mosquitto)
+- InfluxDB
+- Nextcloud / Minio (backup)
+- Active Directory (Windows Server)
+
+---
+
+## Funkcjonalności
+
+- Symulacja workflow radiologicznego (FHIR → RIS → PACS)
+- Integracja danych medycznych (HL7 / FHIR)
+- Telemetria IoT (MQTT)
+- Centralny monitoring i logowanie
+- Środowisko hybrydowe (lokalne + VPS)
+- Automatyczny backup danych
+
+---
+
+## Struktura projektu
+- `kody/` - skrypty konfiguracyjne użyte przy konfiguowaniu aplikacji oraz do automatyzacji 
+- `zdj/` - 
+- `*.md` - dokumentacja (FHIR, MQTT, VM, LXC, AD)
+- `Schematy.md` - schematy architektury
+
+---
+
+## Dokumentacja
+
+- [FHIR](./FHIR.md)
+- [MQTT](./mqtt.md)
+- [VM](./VM.md)
+- [LXC](./LXC.md)
+- [Active Directory](./AD.md)
+- [VPS / Backup](./VPS.md)
+
+---
+
+## Cel projektu
+
+Celem projektu jest zrozumienie i przedstawienie sposobu działania, integracji oraz utrzymania nowoczesnych systemów IT w środowisku szpitalnym.
