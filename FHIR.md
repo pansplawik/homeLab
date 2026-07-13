@@ -212,3 +212,11 @@ curl -X PUT \
   }'
 ```
 - Cel: zmiana statusu w fhir
+
+
+# IHE Profiles
+Kluczowym elementem prawidłowego przepływu pracy w złożonych organizacjach jest utworzenie odpowiednich procedur oraz standardów. W tym celu powstało IHE (Integrating the Healthcare Enterprise), która posiada zestaw standardów i reguł działania zintegrowanych systemów medycznych. Profile IHE pozwalają w sposób przejrzysty zaplanowąć pracę pracowników służby zdrowia oraz utworzyć odpowiednio dobrane integracje systemowe.
+
+Podczas tworzenia tego projektu zostały wykorzystane i wdrożone poszczegółne IHE Profiles:
+
+## SWF (klasyczny Scheduled Workflow) 
