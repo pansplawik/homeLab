@@ -106,3 +106,21 @@ FHIR Observation / DiagnosticReport                           Orthanc PACS
                               ▼
                  Grafana (wykresy i statystyka)
 ```
+### Schemat sieci po wdrożeniu Firewalla
+```text
+                         INTERNET
+                            |
+                            |
+                       +----+----+
+                       | OPNsense|
+                       | Firewall|
+                       +----+----+
+                            |
+                       LAN 192.168.20.0/24
+                            |
+             +--------------+--------------+
+             |                             |
+       192.168.20.10                 192.168.20.20
+          Orthanc                       Mirth
+          PACS                         Connect
+```

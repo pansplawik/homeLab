@@ -12,7 +12,7 @@ Celem projektu jest odwzorowanie rzeczywistej architektury systemów medycznych 
 - przepływu danych medycznych
 - niezawodności i monitoringu infrastruktury
 - wirtualizacji i konteneryzacji
-
+- zarządzaniem przepływem ruchu sieciowego
 ---
 
 ## Architektura
@@ -26,7 +26,7 @@ System został zaprojektowany w oparciu o podejście warstwowe:
 - **Monitoring**: Prometheus, Grafana, Loki
 - **IoT**: MQTT, ESP32, InfluxDB
 - **Backup**: VPS + Nextcloud (zasada 3-2-1)
-- **UTM**: OPNSense
+- **Firewall**: OPNSense (OPNsense 26.7-amd64)
  
 Szczegółowe schematy:  
 [Schematy.md](./Schematy.md)
@@ -75,7 +75,7 @@ Szczegółowe schematy:
 - [LXC](./LXC.md)
 - [Active Directory](./AD.md)
 - [VPS / Backup](./VPS.md)
-
+- [Zarządzanie ruchem](./Firewall.md)
 ---
 
 ## Cel projektu

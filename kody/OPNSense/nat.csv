@@ -1,0 +1,2 @@
+@uuid;enabled;nonat;nosync;sequence;interface;ipprotocol;protocol;source_net;source_not;source_port;destination_net;destination_not;destination_port;target;target_port;staticnatport;log;categories;tag;tagged;description
+0d381990-c78f-4c41-96ab-45fc82434458;1;0;0;100;lan;inet;any;192.168.20.0/24;0;;any;0;;;;0;0;;;;
