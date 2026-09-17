@@ -13,6 +13,7 @@
                   │                          │
                   │  - Monitoring (Prometheus│
                   │    + Grafana + Loki)     │
+                  │  - OPNSense (firewall)   │
                   └──────────────────────────┘
 ```
 
