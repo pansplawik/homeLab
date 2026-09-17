@@ -26,7 +26,8 @@ System został zaprojektowany w oparciu o podejście warstwowe:
 - **Monitoring**: Prometheus, Grafana, Loki
 - **IoT**: MQTT, ESP32, InfluxDB
 - **Backup**: VPS + Nextcloud (zasada 3-2-1)
-
+- **UTM**: OPNSense
+ 
 Szczegółowe schematy:  
 [Schematy.md](./Schematy.md)
 
