@@ -112,7 +112,7 @@ Nie odłącznym elementem jest analiza ruchu w trybie live. OPNSense posiada ide
 LiveView pozwala w czasie rzeczywistym przeanalizować aktualny ruch sieciowy, a w trakcie tworzenia infrastruktury jakie porty oraz jaki ruch można zablokować lub odblokować.
 
 ## Następne etapy laboratorium
-- wdrożenie LXC FHIR do sieci LAN
-- wdrożenie aplikacji PseudoRIS do sieci LAN 
-- otwarcie bezpiecznego dostępu do baz danych aplikacji medycznych
+- wdrożenie LXC FHIR do sieci LAN (inprogress)
+- wdrożenie aplikacji PseudoRIS do sieci LAN (inprogress)
+- indywidualny serwer nginx z reverse proxy
 - utworzenie osobnej sieci LAN dla komputerów Personelu oraz VM managmentowych
