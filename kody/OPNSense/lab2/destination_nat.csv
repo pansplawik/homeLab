@@ -1,0 +1,4 @@
+@uuid;sequence;disabled;nordr;interface;ipprotocol;protocol;source.network;source.port;source.not;destination.network;destination.port;destination.not;target;local-port;poolopts;log;category;descr;tag;tagged;nosync;natreflection;pass;created
+a8e65745-0799-4e73-a062-a0b4e0c42c4c;200;0;0;wan;inet;tcp;any;;0;wanip;4242;0;192.168.20.10;4242;;0;;"DICOM forward";;;0;;pass;
+e43efa94-e43d-419b-a6d0-51a53cc0e9ec;300;0;0;wan;inet;tcp;any;;0;wanip;3306;0;192.168.20.10;3306;;0;;"orthanc db";;;0;;pass;
+9f0b2220-0783-4dc4-bd02-0c468a9b8e0a;400;0;0;wan;inet;tcp;any;;0;wanip;5432;0;192.168.20.30;5432;;0;;"hapi ris db";;;0;;pass;
